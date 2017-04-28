@@ -1,0 +1,82 @@
+SELECT *
+FROM movies;
+
+SELECT movies.title, movies.movieid
+FROM movies
+LIMIT 10;
+
+SELECT *
+FROM movies
+WHERE movies.movieId = '485';
+
+SELECT movies.movieid
+FROM movies
+WHERE lower(movies.title) LIKE '%made in america%'
+GROUP BY movies.movieId;
+
+SELECT *
+FROM movies
+ORDER BY movies.title asc
+LIMIT 10;
+
+SELECT *
+FROM movies
+WHERE movies.title LIKE '%(2002)';
+
+SELECT *
+FROM movies
+WHERE lower(movies.title) LIKE '%godfather, the%';
+
+SELECT *
+FROM movies
+WHERE lower(movies.genres) LIKE '%comedy%';
+
+SELECT *
+FROM movies
+WHERE lower(movies.genres) LIKE '%comedy%' AND movies.title LIKE '%(2002)';
+
+SELECT *
+FROM tags
+WHERE lower(tags.tag) LIKE '%death%';
+
+SELECT *
+FROM movies
+JOIN tags ON movies.movieid = tags.movieid
+WHERE lower(tags.tag) LIKE '%death%' AND lower(movies.genres) LIKE '%comedy%';
+
+SELECT *
+FROM movies
+WHERE lower(movies.title) LIKE '%super%' AND (movies.title LIKE '%(2002)%' OR movies.title LIKE '%(2001)%');
+
+SELECT movies.title, ratings.rating
+FROM movies
+JOIN ratings ON movies.movieid = ratings.movieid
+WHERE lower(movies.title) LIKE '%godfather, the%';
+
+SELECT movies.title, ratings.rating
+FROM movies
+JOIN ratings ON movies.movieid = ratings.movieid
+WHERE lower(movies.title) LIKE '%godfather, the%'
+ORDER BY ratings.timestamp desc;
+
+SELECT movies.title, links.imdbid
+FROM movies
+JOIN links ON (movies.movieid = links.movieid AND lower(movies.genres) LIKE '%comedy%')
+WHERE movies.title LIKE '%(2005)%';
+
+SELECT movies.movieid, movies.title, movies.genres, ratings.rating
+FROM movies
+INNER JOIN ratings ON movies.movieid = ratings.movieid
+GROUP BY movies.movieid, movies.title, movies.genres, ratings.rating
+HAVING count(ratings.rating) = '0';
+
+SELECT movies.movieid, movies.title, movies.genres, ratings.rating
+FROM movies
+LEFT JOIN ratings ON movies.movieid = ratings.movieid
+WHERE ratings.rating IS null;
+
+SELECT movies.movieid, movies.title, genre.genres
+FROM movie_genre
+JOIN movies ON movie_genre.movieid = movies.movieid
+JOIN genre ON movie_genre.genre_id = genre.id
+WHERE movie_genre.genre_id = 15;
